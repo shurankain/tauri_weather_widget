@@ -4,6 +4,13 @@ This application is a fun desktop weather widget, that allows you to see current
 
 ## How to run this app:
 
-Use ```Bash pnpm install``` to install all dependancies
+To install dependencies use:
+```bash
+pnpm install
+```
 
-Use ```Bash pnpm tauri dev``` to run desktop app
+To run desktop app:
+
+```bash
+pnpm tauri dev
+```
