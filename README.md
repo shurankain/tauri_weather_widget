@@ -1,7 +1,9 @@
 # Tauri + React
 
-This template should help get you started developing with Tauri and React in Vite.
+This application is a fun desktop weather widget, that allows you to see current weather in desired location.
 
-## Recommended IDE Setup
+## How to run this app:
 
-- [VS Code](https://code.visualstudio.com/) + [Tauri](https://marketplace.visualstudio.com/items?itemName=tauri-apps.tauri-vscode) + [rust-analyzer](https://marketplace.visualstudio.com/items?itemName=rust-lang.rust-analyzer)
+Use ```Bash pnpm install``` to install all dependancies
+
+Use ```Bash pnpm tauri dev``` to run desktop app
