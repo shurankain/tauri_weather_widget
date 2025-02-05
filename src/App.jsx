@@ -3,11 +3,17 @@ import { invoke } from "@tauri-apps/api/core";
 import "./App.css";
 
 function App() {
-  const [forecast, setCityForecast] = useState("");
-  const [cityName, setCityName] = useState("");
+  const [weather, setWeather] = useState("");
+  const [city, setCityName] = useState("Cracow");
 
-  async function city_select() {
-    setCityForecast(await invoke("load_forecast", { cityName }));
+  async function fetchWeather() {
+    try {
+      const result = await invoke("get_weather", { city });
+      setWeather(result);
+    } catch (error) {
+      console.error("Error fetching weather:", error);
+      setWeather("Failed to fetch weather.");
+    }
   }
 
   return (
@@ -16,7 +22,7 @@ function App() {
         className="row"
         onSubmit={(e) => {
           e.preventDefault();
-          city_select();
+          fetchWeather();
         }}
       >
         <input
@@ -26,7 +32,7 @@ function App() {
         />
         <button type="submit">Select</button>
       </form>
-      <p>{forecast}</p>
+      <p>{weather}</p>
     </main>
   );
 }
