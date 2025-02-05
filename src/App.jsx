@@ -32,7 +32,11 @@ function App() {
         />
         <button type="submit">Select</button>
       </form>
-      <p>{weather}</p>
+      <div>
+        {weather.split(" | ").map((line, index) => (
+          <p key={index}>{line}</p>
+        ))}
+      </div>
     </main>
   );
 }
