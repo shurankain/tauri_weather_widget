@@ -29,7 +29,7 @@ async fn get_weather(city: String) -> Result<String, String> {
     let weather: Weather = response.json().await.map_err(|e| e.to_string())?;
 
     let result = format!(
-        "The weather in {} is {}°C with {}",
+        "The weather in {} is {:.0}°C With {}",
         city, weather.main.temp, weather.weather[0].description
     );
 
