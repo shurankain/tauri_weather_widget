@@ -1,5 +1,6 @@
+use serde::{Deserialize, Serialize};
+use std::fs;
 use tauri::{LogicalSize, Manager};
-use serde::Deserialize;
 
 #[derive(Debug, Deserialize)]
 struct Weather {
@@ -18,9 +19,31 @@ struct WeatherDescription {
     description: String,
 }
 
+#[derive(Serialize, Deserialize)]
+struct Config {
+    api_key: String,
+    default_city: String,
+}
+
+#[tauri::command]
+async fn save_config(api_key: String, default_city: String) -> Result<(), String> {
+    let config = Config {
+        api_key,
+        default_city,
+    };
+    let config_json = serde_json::to_string_pretty(&config).map_err(|e| e.to_string())?;
+    fs::write("config.json", config_json).map_err(|e| e.to_string())?;
+    Ok(())
+}
+
+fn load_config() -> Result<Config, String> {
+    let config_data = fs::read_to_string("config.json").map_err(|_| "Config not found")?;
+    serde_json::from_str(&config_data).map_err(|e| e.to_string())
+}
+
 #[tauri::command]
 async fn get_weather(city: String) -> Result<String, String> {
-    let api_key = "your_api_key"; // Replace with your actual API key
+    let api_key = load_config()?.api_key;
     let url = format!(
         "https://api.openweathermap.org/data/2.5/weather?q={}&units=metric&appid={}",
         city, api_key
@@ -44,7 +67,9 @@ pub fn run() {
         .invoke_handler(tauri::generate_handler![get_weather])
         .setup(|app| {
             let window = app.get_webview_window("main").unwrap();
-            window.set_size(tauri::Size::Logical(LogicalSize::new(400., 300.))).unwrap();
+            window
+                .set_size(tauri::Size::Logical(LogicalSize::new(400., 300.)))
+                .unwrap();
             Ok(())
         })
         .run(tauri::generate_context!())
