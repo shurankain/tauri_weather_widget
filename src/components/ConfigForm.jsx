@@ -9,7 +9,7 @@ function ConfigForm({ onSave }) {
     async function handleSave() {
         try {
             info("Calling the save_config function from JS");
-            await invoke("save_config", { api_key: apiKey, default_city: defaultCity });
+            await invoke("save_config", { apiKey, defaultCity });
             info("Config was saved successfully and returned control to JS");
             onSave();
         } catch (error) {
