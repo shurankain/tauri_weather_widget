@@ -1,5 +1,6 @@
 import { useState } from "react";
 import { invoke } from "@tauri-apps/api/core";
+import { info } from '@tauri-apps/plugin-log';
 
 function ConfigForm({ onSave }) {
     const [apiKey, setApiKey] = useState("");
@@ -7,7 +8,9 @@ function ConfigForm({ onSave }) {
 
     async function handleSave() {
         try {
+            info("Calling the save_config function from JS");
             await invoke("save_config", { api_key: apiKey, default_city: defaultCity });
+            info("Config was saved successfully and returned control to JS");
             onSave();
         } catch (error) {
             console.error("Failed to save config:", error);

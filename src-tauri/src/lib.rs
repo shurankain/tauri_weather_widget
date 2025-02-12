@@ -2,6 +2,7 @@ use serde::{Deserialize, Serialize};
 use std::fs;
 use tauri::{LogicalSize, Manager};
 use tauri_plugin_log::{Target, TargetKind};
+use log::info;
 
 #[derive(Debug, Deserialize)]
 struct Weather {
@@ -28,16 +29,19 @@ struct Config {
 
 #[tauri::command]
 async fn save_config(api_key: String, default_city: String) -> Result<(), String> {
+    info!("Saving default data");
     let config = Config {
         api_key,
         default_city,
     };
     let config_json = serde_json::to_string_pretty(&config).map_err(|e| e.to_string())?;
     fs::write("config.json", config_json).map_err(|e| e.to_string())?;
+    info!("Default data was saved successfully");
     Ok(())
 }
 
 fn load_config() -> Result<Config, String> {
+    info!("Loading default data");
     let config_data = fs::read_to_string("config.json").map_err(|_| "Config not found")?;
     serde_json::from_str(&config_data).map_err(|e| e.to_string())
 }
@@ -66,13 +70,15 @@ pub fn run() {
     tauri::Builder::default()
         .plugin(tauri_plugin_log::Builder::new().build())
         .plugin(tauri_plugin_opener::init())
-        .invoke_handler(tauri::generate_handler![get_weather])
-        .invoke_handler(tauri::generate_handler![save_config])
+        .invoke_handler(tauri::generate_handler![get_weather, save_config])
         .setup(|app| {
             let window = app.get_webview_window("main").unwrap();
+            let width = 400.;
+            let height = 300.;
             window
                 .set_size(tauri::Size::Logical(LogicalSize::new(400., 300.)))
                 .unwrap();
+            info!("Window size was set to {}x{}", width, height);
             Ok(())
         })
         .plugin(tauri_plugin_log::Builder::new().build())
