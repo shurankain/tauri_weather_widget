@@ -5,7 +5,7 @@ import ConfigForm from "./components/ConfigForm";
 import { info } from '@tauri-apps/plugin-log';
 
 function App() {
-  const [weather, setWeather] = useState("");
+  const [weather, setWeather] = useState("Please enter city name, or click Load | to load weather for selected city.");
   const [city, setCityName] = useState("");
   const [isConfigured, setIsConfigured] = useState(false);
 
@@ -13,9 +13,7 @@ function App() {
     async function checkConfig() {
       try {
         info("Trying to load config from JS");
-        let loadingResult = await invoke("load_config");
-        info("Default city was loaded: " + loadingResult.default_city);
-        setCityName(loadingResult.default_city);
+        await loadAndSetConfigData();
         setIsConfigured(true);
       } catch (error) {
         setIsConfigured(false);
@@ -23,6 +21,12 @@ function App() {
     }
     checkConfig();
   }, []);
+
+  async function loadAndSetConfigData() {
+    let loadingResult = await invoke("load_config");
+    info("Default city was loaded: " + loadingResult.default_city);
+    setCityName(loadingResult.default_city);
+  }
 
   async function fetchWeather() {
     try {
@@ -52,7 +56,7 @@ function App() {
                         onChange={(e) => setCityName(e.currentTarget.value)}
                         placeholder="City name..."
                     />
-                    <button type="submit">Select</button>
+                    <button type="submit">Load</button>
                 </form>
                 <div>
                     {weather.split(" | ").map((line, index) => (
@@ -61,7 +65,10 @@ function App() {
                 </div>
             </main>
         ) : (
-            <ConfigForm onSave={() => setIsConfigured(true)} />
+            <ConfigForm onSave={() => {
+                loadAndSetConfigData();
+                setIsConfigured(true);
+            }} />
         )}
     </div>
 );

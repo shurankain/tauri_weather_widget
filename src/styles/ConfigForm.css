@@ -1,0 +1,27 @@
+.config-form {
+    margin: 0;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    text-align: center;
+}
+
+.config-form>.input-line {
+    margin-left: 10px;
+    margin-right: 10px;
+    height: 40px;
+    margin-top: 10px;
+    margin-bottom: 10px;
+    display: flex;
+    justify-content: center;
+}
+
+.config-form>div>input {
+    width: 280px;
+}
+
+.config-form>.submit-button {
+    margin-left: 30%;
+    margin-top: 20px;
+    width: 40%;
+  }
