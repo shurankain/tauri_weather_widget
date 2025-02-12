@@ -65,6 +65,7 @@ pub fn run() {
     tauri::Builder::default()
         .plugin(tauri_plugin_opener::init())
         .invoke_handler(tauri::generate_handler![get_weather])
+        .invoke_handler(tauri::generate_handler![save_config])
         .setup(|app| {
             let window = app.get_webview_window("main").unwrap();
             window
