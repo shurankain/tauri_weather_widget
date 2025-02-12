@@ -2,16 +2,20 @@ import { useState, useEffect } from "react";
 import { invoke } from "@tauri-apps/api/core";
 import "./App.css";
 import ConfigForm from "./components/ConfigForm";
+import { info } from '@tauri-apps/plugin-log';
 
 function App() {
   const [weather, setWeather] = useState("");
-  const [city, setCityName] = useState("Kraków");
+  const [city, setCityName] = useState("");
   const [isConfigured, setIsConfigured] = useState(false);
 
   useEffect(() => {
     async function checkConfig() {
       try {
-        await invoke("load_config");
+        info("Trying to load config from JS");
+        let loadingResult = await invoke("load_config");
+        info("Default city was loaded: " + loadingResult.default_city);
+        setCityName(loadingResult.default_city);
         setIsConfigured(true);
       } catch (error) {
         setIsConfigured(false);
@@ -22,6 +26,7 @@ function App() {
 
   async function fetchWeather() {
     try {
+      info("Calling get_weather from JS");
       const result = await invoke("get_weather", { city });
       setWeather(result);
     } catch (error) {
