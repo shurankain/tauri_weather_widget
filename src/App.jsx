@@ -47,7 +47,7 @@ function App() {
                     }}
                 >
                     <input
-                        id="greet-input"
+                        id="city-input"
                         value={city}
                         onChange={(e) => setCityName(e.currentTarget.value)}
                         placeholder="City name..."
