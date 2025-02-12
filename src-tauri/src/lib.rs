@@ -76,7 +76,7 @@ pub fn run() {
             let width = 400.;
             let height = 300.;
             window
-                .set_size(tauri::Size::Logical(LogicalSize::new(400., 300.)))
+                .set_size(tauri::Size::Logical(LogicalSize::new(width, height)))
                 .unwrap();
             info!("Window size was set to {}x{}", width, height);
             Ok(())
