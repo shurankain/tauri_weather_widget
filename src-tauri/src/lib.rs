@@ -1,7 +1,6 @@
 use serde::{Deserialize, Serialize};
 use std::fs;
 use tauri::{LogicalSize, Manager};
-use tauri_plugin_log::{Target, TargetKind};
 use log::info;
 
 #[derive(Debug, Deserialize)]
@@ -40,6 +39,7 @@ async fn save_config(api_key: String, default_city: String) -> Result<(), String
     Ok(())
 }
 
+#[tauri::command]
 fn load_config() -> Result<Config, String> {
     info!("Loading default data");
     let config_data = fs::read_to_string("config.json").map_err(|_| "Config not found")?;
@@ -70,7 +70,7 @@ pub fn run() {
     tauri::Builder::default()
         .plugin(tauri_plugin_log::Builder::new().build())
         .plugin(tauri_plugin_opener::init())
-        .invoke_handler(tauri::generate_handler![get_weather, save_config])
+        .invoke_handler(tauri::generate_handler![get_weather, save_config, load_config])
         .setup(|app| {
             let window = app.get_webview_window("main").unwrap();
             let width = 400.;
@@ -81,7 +81,6 @@ pub fn run() {
             info!("Window size was set to {}x{}", width, height);
             Ok(())
         })
-        .plugin(tauri_plugin_log::Builder::new().build())
         .run(tauri::generate_context!())
         .expect("error while running tauri application");
 }
