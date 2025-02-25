@@ -10,17 +10,18 @@ function App() {
   const [isConfigured, setIsConfigured] = useState(false);
 
   useEffect(() => {
-    async function checkConfig() {
-      try {
-        info("Trying to load config from JS");
-        await loadAndSetConfigData();
-        setIsConfigured(true);
-      } catch (error) {
-        setIsConfigured(false);
-      }
-    }
     checkConfig();
   }, []);
+
+  async function checkConfig() {
+    try {
+      info("Trying to load config from JS");
+      await loadAndSetConfigData();
+      setIsConfigured(true);
+    } catch (error) {
+      setIsConfigured(false);
+    }
+  }
 
   async function loadAndSetConfigData() {
     let loadingResult = await invoke("load_config");
@@ -72,7 +73,6 @@ function App() {
       )}
     </div>
   );
-
 }
 
 export default App;
