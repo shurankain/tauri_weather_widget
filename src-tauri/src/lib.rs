@@ -3,19 +3,19 @@ use serde::{Deserialize, Serialize};
 use std::fs;
 use tauri::{LogicalSize, Manager};
 
-#[derive(Debug, Deserialize)]
+#[derive(Deserialize)]
 struct Weather {
     main: Main,
     weather: Vec<WeatherDescription>,
 }
 
-#[derive(Debug, Deserialize)]
+#[derive(Deserialize)]
 struct Main {
     temp: f64,
     feels_like: f64,
 }
 
-#[derive(Debug, Deserialize)]
+#[derive(Deserialize)]
 struct WeatherDescription {
     description: String,
 }
