@@ -1,7 +1,7 @@
+use log::info;
 use serde::{Deserialize, Serialize};
 use std::fs;
 use tauri::{LogicalSize, Manager};
-use log::info;
 
 #[derive(Debug, Deserialize)]
 struct Weather {
@@ -70,7 +70,11 @@ pub fn run() {
     tauri::Builder::default()
         .plugin(tauri_plugin_log::Builder::new().build())
         .plugin(tauri_plugin_opener::init())
-        .invoke_handler(tauri::generate_handler![get_weather, save_config, load_config])
+        .invoke_handler(tauri::generate_handler![
+            get_weather,
+            save_config,
+            load_config
+        ])
         .setup(|app| {
             let window = app.get_webview_window("main").unwrap();
             let width = 400.;

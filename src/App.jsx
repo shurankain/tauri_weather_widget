@@ -41,38 +41,38 @@ function App() {
 
   return (
     <div>
-        {isConfigured ? (
-            <main className="container">
-                <form
-                    className="row"
-                    onSubmit={(e) => {
-                        e.preventDefault();
-                        fetchWeather();
-                    }}
-                >
-                    <input
-                        id="city-input"
-                        value={city}
-                        onChange={(e) => setCityName(e.currentTarget.value)}
-                        placeholder="City name..."
-                    />
-                    <button type="submit">Load</button>
-                </form>
-                <div>
-                    {weather.split(" | ").map((line, index) => (
-                        <p key={index}>{line}</p>
-                    ))}
-                </div>
-            </main>
-        ) : (
-            <ConfigForm onSave={() => {
-                loadAndSetConfigData();
-                setIsConfigured(true);
-            }} />
-        )}
+      {isConfigured ? (
+        <main className="container">
+          <form
+            className="row"
+            onSubmit={(e) => {
+              e.preventDefault();
+              fetchWeather();
+            }}
+          >
+            <input
+              id="city-input"
+              value={city}
+              onChange={(e) => setCityName(e.currentTarget.value)}
+              placeholder="City name..."
+            />
+            <button type="submit">Load</button>
+          </form>
+          <div>
+            {weather.split(" | ").map((line, index) => (
+              <p key={index}>{line}</p>
+            ))}
+          </div>
+        </main>
+      ) : (
+        <ConfigForm onSave={() => {
+          loadAndSetConfigData();
+          setIsConfigured(true);
+        }} />
+      )}
     </div>
-);
-  
+  );
+
 }
 
 export default App;
